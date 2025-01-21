@@ -1,13 +1,12 @@
 import React from "react";
 import { StrictMode } from "react";
 import Navbar from "./components/Navbar";
-import Home from "./components/Home";
+import AllPosts from "./components/AllPosts";
 
 const App = () => {
   return (
     <StrictMode>
       <Navbar />
-      <Home />
     </StrictMode>
   );
 };
