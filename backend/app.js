@@ -14,7 +14,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 
 app.get("/", (req, res) => {
-  res.redirect("/api/users");
+  res.send("Welcome to the API");
 });
 
 mongoose
