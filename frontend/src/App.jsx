@@ -11,7 +11,12 @@ import AuthPage from "./components/AuthPage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: [<Navbar/>,<AllPosts />],
+    element: (
+      <>
+        <Navbar name="Sambhav" />
+        <AllPosts />
+      </>
+    ),
   },
   {
     path: "/newpost",
@@ -22,13 +27,13 @@ const router = createBrowserRouter([
     element: <UserDetails />,
   },
   {
-    path: '/auth',
+    path: "/auth",
     element: <AuthPage />,
   },
   {
-    path: '*',
+    path: "*",
     element: <NotFound />,
-  }
+  },
 ]);
 
 const App = () => {

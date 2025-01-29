@@ -1,16 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,22 +22,20 @@ export default function AuthPage() {
     setMessage("");
     setError("");
 
-    if (!isLogin && formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
     try {
-      const endpoint = isLogin ? "/login" : "/signup";
+      const endpoint = isLogin ? "/login" : "/register";
       const payload = isLogin
-        ? { email: formData.email, password: formData.password }
-        : { name: formData.name, email: formData.email, password: formData.password };
+        ? { username: formData.username, password: formData.password }
+        : { username: formData.username, email: formData.email, password: formData.password };
 
-      const response = await axios.post(`http://localhost:5000${endpoint}`, payload,{withCredentials: true});
+      const response = await axios.post(
+        `http://localhost:5000/api/users${endpoint}`,
+        payload,
+        { withCredentials: true }
+      );
 
       if (isLogin) {
-        localStorage.setItem("token", response.data.token);
-        setMessage("Login successful!");
+        navigate("/");
       } else {
         setMessage("Signup successful! Please log in.");
       }
@@ -56,31 +55,31 @@ export default function AuthPage() {
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <form className="space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <label className="block mb-1">Username</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
+              placeholder="Enter your name"
+            />
+          </div>
+
           {!isLogin && (
             <div>
-              <label className="block mb-1">Full Name</label>
+              <label className="block mb-1">Email</label>
               <input
-                type="text"
-                name="name"
-                value={formData.name}
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
-                placeholder="John Doe"
+                placeholder="your@email.com"
               />
             </div>
           )}
-
-          <div>
-            <label className="block mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
-              placeholder="your@email.com"
-            />
-          </div>
 
           <div>
             <label className="block mb-1">Password</label>
@@ -90,23 +89,9 @@ export default function AuthPage() {
               value={formData.password}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
-              placeholder="••••••••"
+              placeholder="password"
             />
           </div>
-
-          {!isLogin && (
-            <div>
-              <label className="block mb-1">Confirm Password</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
-                placeholder="••••••••"
-              />
-            </div>
-          )}
 
           <button
             type="submit"
@@ -123,7 +108,7 @@ export default function AuthPage() {
               setIsLogin(!isLogin);
               setMessage("");
               setError("");
-              setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+              setFormData({ username: "", email: "", password: "" });
             }}
           >
             {isLogin ? "Create an account" : "Already have an account? Login"}
