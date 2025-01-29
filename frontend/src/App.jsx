@@ -1,25 +1,38 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import AllPosts from "./components/AllPosts";
 import NewPost from "./components/NewPost";
 import UserDetails from "./components/UserDetails";
-import Register from "./components/Register";
-import Login from "./components/Login";
+import GlassCard from "./components/ui/Glass";
+import NotFound from "./components/NotFound";
+import AuthPage from "./components/AuthPage";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: [<Navbar/>,<AllPosts />],
+  },
+  {
+    path: "/newpost",
+    element: <NewPost />,
+  },
+  {
+    path: "/contact",
+    element: <UserDetails />,
+  },
+  {
+    path: '/auth',
+    element: <AuthPage />,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
+  }
+]);
 
 const App = () => {
-  return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<AllPosts />} />
-        <Route path="/about" element={<NewPost />} />
-        <Route path="/contact" element={<UserDetails />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;
