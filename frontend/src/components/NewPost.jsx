@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import SpotlightCard from './ui/Glass';  // Import the SpotlightCard component
+import { useNavigate } from 'react-router-dom';
+import SpotlightCard from './ui/Glass'; 
 
 const AddPost = () => {
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(''); // Added state for content
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,21 +17,21 @@ const AddPost = () => {
       return;
     }
 
-    // Post submission logic (e.g., sending to backend API)
     const newPost = {
       title,
       content,
       likes: 0,
       comments: [],
     };
-
-    // For now, just log the new post
     console.log('New Post:', newPost);
 
-    // Reset the form
+    // Reset form and error after submission
     setTitle('');
     setContent('');
     setError(null);
+
+    // Navigate to home after submission
+    navigate('/');
   };
 
   return (

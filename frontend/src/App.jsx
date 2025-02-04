@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <>
-        <Navbar name="Sambhav" />
+        <Navbar />
         <AllPosts />
       </>
     ),
